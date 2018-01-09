@@ -8,7 +8,7 @@ class App extends Component {
 
     this.state = {
       currentUser: {
-        name: 'Bob'
+        name: 'Anonymous'
       }, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
         {
@@ -43,7 +43,7 @@ class App extends Component {
     return (
       <div>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} createMessage={this.createMessage} />
+        <ChatBar changeUser={this.changeUser} createMessage={this.createMessage} />
       </div>
     );
   }
@@ -59,6 +59,20 @@ class App extends Component {
     this.setState({
       messages: newMsgs
     })
+  }
+
+  changeUser = (name) => {
+    if (name !== '') {
+      this.setState({
+        currentUser: { name }
+      })
+    } else {
+      this.setState({
+        currentUser: { name: 'Anonymous' }
+      })
+    }
+
+
   }
 
 }

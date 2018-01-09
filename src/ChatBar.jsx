@@ -9,7 +9,7 @@ class ChatBar extends Component {
       <footer className="chatbar">
         <input type="text" className="chatbar-username"
           placeholder={'Your Name (Optional)'}
-          defaultValue={this.props.currentUser.name} />
+          onBlur={this.changeUser} />
         <input type="text" className="chatbar-message"
           placeholder="Type a message and hit ENTER"
           onKeyPress={this.createMessage} />
@@ -22,7 +22,10 @@ class ChatBar extends Component {
       this.props.createMessage(e.target.value)
       e.target.value = ''
     }
+  }
 
+  changeUser = (f) => {
+    this.props.changeUser(f.target.value)
   }
 
 }
