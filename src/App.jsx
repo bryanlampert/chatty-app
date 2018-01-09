@@ -5,28 +5,25 @@ import ChatBar from './ChatBar.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       currentUser: {
         name: 'Anonymous'
       }, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [
-        {
-          id: 'whoLetBobOut',
-          username: 'Bob',
-          content: 'Has anyone seen my marbles?'
-        },
-        {
-          id: 'anony-moose',
-          username: 'Anonymous',
-          content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
-        }
-      ]
+      messages: []
     };
   }
 
   componentDidMount() {
     console.log("componentDidMount <App />");
+
+    // Open server connection
+    const socketserver = "ws://localhost:3001";
+    this.socket = new WebSocket(socketserver);
+
+    this.socket.onopen = (evt) => {
+      console.log("Connected to the server");
+    };
+
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
@@ -35,7 +32,8 @@ class App extends Component {
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
       this.setState({messages: messages});
-    }, 3000);
+    }, 2000);
+
   }
 
   render() {
@@ -49,16 +47,34 @@ class App extends Component {
   }
 
   createMessage = (content) => {
+
     const newMessage = {
       username: this.state.currentUser.name,
       content
     }
 
-    const newMsgs = this.state.messages.concat(newMessage)
+    // Send to the server
+    let stringifyMsg = JSON.stringify(newMessage)
+    this.socket.send(stringifyMsg)
 
-    this.setState({
-      messages: newMsgs
-    })
+
+    this.socket.onmessage = (e) => {
+      let msgData = JSON.parse(e.data)
+
+      const displayMessage = {
+        id: msgData.id,
+        username: msgData.username,
+        content: msgData.content
+      }
+
+      const newMsgs = this.state.messages.concat(displayMessage)
+
+      this.setState({
+        messages: newMsgs
+      })
+
+    }
+
   }
 
   changeUser = (name) => {
@@ -71,9 +87,8 @@ class App extends Component {
         currentUser: { name: 'Anonymous' }
       })
     }
-
-
   }
 
 }
+
 export default App;
