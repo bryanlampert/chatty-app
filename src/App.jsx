@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Nav from './nav.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
@@ -9,7 +10,8 @@ class App extends Component {
       currentUser: {
         name: 'Anonymous'
       },
-      messages: []
+      messages: [],
+      users: 0
     };
   }
 
@@ -25,7 +27,7 @@ class App extends Component {
 
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
-      console.log(data);
+      console.log(data, 'data from onmessage');
 
       switch(data.type) {
         case "incomingMessage":
@@ -56,10 +58,11 @@ class App extends Component {
           });
 
           break;
-
-        default:
-          // show an error in the console if the message type is unknown
-          throw new Error("Unknown event type " + msgData.type);
+      }
+      if (data.users) {
+        this.setState({
+          users: data.users
+        });
       }
 
     };
@@ -70,6 +73,7 @@ class App extends Component {
     console.log('Rendering <App />');
     return (
       <div>
+        <Nav users={this.state.users} />
         <MessageList messages={this.state.messages} />
         <ChatBar changeUser={this.changeUser} createMessage={this.createMessage} />
       </div>
@@ -91,21 +95,26 @@ class App extends Component {
   }
 
   changeUser = (name) => {
+
     if (name !== '') {
 
       const newName = {
         type: 'postNotification',
-        content: `${this.state.currentUser.name} has changed name to ${ name }`
+        content: `${this.state.currentUser.name} has changed name to ${ name }`,
       }
 
       let stringifyName = JSON.stringify(newName)
       this.socket.send(stringifyName)
 
+      this.setState({
+        currentUser: { name }
+      })
+
     } else {
 
       const anonName = {
         type: 'postNotification',
-        content: `${this.state.currentUser.name} has changed name to Anonymous`
+        content: `${this.state.currentUser.name} has changed name to Anonymous`,
       }
 
       let stringifyAnon = JSON.stringify(anonName)

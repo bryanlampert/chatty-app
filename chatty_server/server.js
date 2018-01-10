@@ -25,6 +25,12 @@ const uuidv4 = require('uuid/v4');
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ users: wss.clients.size }));
+    }
+  });
+
   ws.on('message', (message) => {
     let data = JSON.parse(message);
 
@@ -45,7 +51,7 @@ wss.on('connection', (ws) => {
       });
 
     } else if (data.type === 'postNotification') {
-      console.log(data.content)
+      console.log(data.content);
       newUser = {
         type: 'incomingNotification',
         content: data.content,
@@ -63,6 +69,13 @@ wss.on('connection', (ws) => {
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ users: wss.clients.size }));
+      }
+    });
+  });
 
 });
