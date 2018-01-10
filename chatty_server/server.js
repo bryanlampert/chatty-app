@@ -19,15 +19,26 @@ const wss = new SocketServer({ server });
 // Create a unique uuid
 const uuidv4 = require('uuid/v4');
 
+// Colour array
+let colours = [ 'red', 'green', 'blue', 'magenta' ];
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
+  let setColour = {
+    type: 'incomingColour',
+    userColour: colours[Math.floor(Math.random() * colours.length)]
+  };
+  ws.send(JSON.stringify(setColour));
+
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({ users: wss.clients.size }));
+      client.send(JSON.stringify({
+        userCount: wss.clients.size
+      }));
     }
   });
 
@@ -41,7 +52,8 @@ wss.on('connection', (ws) => {
         type: 'incomingMessage',
         id: uuidv4(),
         username: data.username,
-        content: data.content
+        content: data.content,
+        userColour: data.userColour
       };
 
       wss.clients.forEach((client) => {
@@ -76,6 +88,10 @@ wss.on('connection', (ws) => {
         client.send(JSON.stringify({ users: wss.clients.size }));
       }
     });
+  });
+
+  ws.on('error', e => {
+    console.log('oh no! error: ', e);
   });
 
 });

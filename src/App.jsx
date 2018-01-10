@@ -1,17 +1,21 @@
 import React, {Component} from 'react';
 import Nav from './nav.jsx';
+import Welcome from './Welcome.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
 class App extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       currentUser: {
-        name: 'Anonymous'
+        name: 'Anonymous',
+        userColour: 'White'
       },
-      messages: [],
-      users: 0
+      messages: [{ userColour: null }],
+      userCount: 0,
+      welcome: true
     };
   }
 
@@ -25,6 +29,12 @@ class App extends Component {
       console.log("Connected to the server");
     };
 
+    setTimeout(() =>
+      this.setState({
+        welcome: false
+      }), 2000
+    );
+
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
       console.log(data, 'data from onmessage');
@@ -35,7 +45,8 @@ class App extends Component {
           const displayMessage = {
             id: data.id,
             username: data.username,
-            content: data.content
+            content: data.content,
+            userColour: data.userColour
           };
 
           const newMsgs = this.state.messages.concat(displayMessage);
@@ -58,10 +69,23 @@ class App extends Component {
           });
 
           break;
+
+       case "incomingColour":
+
+         const newColour = Object.assign(this.state.currentUser, {
+           userColour: data.userColour
+         });
+
+         this.setState({
+           currentUser: newColour
+         });
+
+         break;
+
       }
-      if (data.users) {
+      if (data.userCount) {
         this.setState({
-          users: data.users
+          userCount: data.userCount
         });
       }
 
@@ -71,54 +95,71 @@ class App extends Component {
 
   render() {
     console.log('Rendering <App />');
+
     return (
-      <div>
-        <Nav users={this.state.users} />
-        <MessageList messages={this.state.messages} />
-        <ChatBar changeUser={this.changeUser} createMessage={this.createMessage} />
-      </div>
+      this.state.welcome ?
+        (<div>
+          <Nav userCount={this.state.userCount} />
+          <Welcome />
+          <MessageList messages={this.state.messages} />
+          <ChatBar changeUser={this.changeUser} createMessage={this.createMessage} />
+        </div>) :
+        (<div>
+          <Nav userCount={this.state.userCount} />
+          <MessageList messages={this.state.messages} />
+          <ChatBar changeUser={this.changeUser} createMessage={this.createMessage} />
+        </div>)
     );
   }
 
   createMessage = (content) => {
+    if (content !== '') {
+      const newMessage = {
+        type: 'postMessage',
+        username: this.state.currentUser.name,
+        userColour: this.state.currentUser.userColour,
+        content
+      }
 
-    const newMessage = {
-      type: 'postMessage',
-      username: this.state.currentUser.name,
-      content
+      // Send to the server
+      let stringifyMsg = JSON.stringify(newMessage)
+      this.socket.send(stringifyMsg)
+
     }
-
-    // Send to the server
-    let stringifyMsg = JSON.stringify(newMessage)
-    this.socket.send(stringifyMsg)
-
   }
 
   changeUser = (name) => {
 
-    if (name !== '') {
+    if (name !== this.state.currentUser.name) {
+      if (name !== '') {
 
-      const newName = {
-        type: 'postNotification',
-        content: `${this.state.currentUser.name} has changed name to ${ name }`,
+        const newName = {
+          type: 'postNotification',
+          content: `${this.state.currentUser.name} has changed name to ${ name }`,
+        }
+
+        let stringifyName = JSON.stringify(newName)
+        this.socket.send(stringifyName)
+
+        this.setState({
+          currentUser: { name }
+        })
+
+      } else if (this.state.currentUser.name !== 'Anonymous') {
+
+        const anonName = {
+          type: 'postNotification',
+          content: `${this.state.currentUser.name} has changed name to Anonymous`,
+        }
+
+        let stringifyAnon = JSON.stringify(anonName)
+        this.socket.send(stringifyAnon)
+
+        this.setState({
+          currentUser: { name: 'Anonymous' }
+        })
+
       }
-
-      let stringifyName = JSON.stringify(newName)
-      this.socket.send(stringifyName)
-
-      this.setState({
-        currentUser: { name }
-      })
-
-    } else {
-
-      const anonName = {
-        type: 'postNotification',
-        content: `${this.state.currentUser.name} has changed name to Anonymous`,
-      }
-
-      let stringifyAnon = JSON.stringify(anonName)
-      this.socket.send(stringifyAnon)
     }
   }
 
