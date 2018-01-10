@@ -3,6 +3,7 @@ import Nav from './nav.jsx';
 import Welcome from './Welcome.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
+import { toArray } from 'react-emoji-render';
 
 class App extends Component {
 
@@ -43,7 +44,7 @@ class App extends Component {
           const displayMessage = {
             id: data.id,
             username: data.username,
-            content: data.content,
+            content: toArray(data.content),
             image: data.image,
             userColour: data.userColour
           };
