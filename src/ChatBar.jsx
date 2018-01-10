@@ -8,16 +8,16 @@ class ChatBar extends Component {
     return (
       <footer className="chatbar">
         <input type="text" className="chatbar-username"
-          placeholder={'Your Name (Optional)'}
+          placeholder={'Your Handle (Optional)'}
           onBlur={this.changeUser} />
         <input type="text" className="chatbar-message"
           placeholder="Type a message and hit ENTER"
-          onKeyPress={this.createMessage} />
+          onKeyPress={this.handleSubmit} />
       </footer>
     );
   }
 
-  createMessage = (e) => {
+  handleSubmit = (e) => {
     if (e.key === "Enter") {
       this.props.createMessage(e.target.value)
       e.target.value = ''

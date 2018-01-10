@@ -8,7 +8,7 @@ class App extends Component {
     this.state = {
       currentUser: {
         name: 'Anonymous'
-      }, // optional. if currentUser is not defined, it means the user is Anonymous
+      },
       messages: []
     };
   }
@@ -17,22 +17,52 @@ class App extends Component {
     console.log("componentDidMount <App />");
 
     // Open server connection
-    const socketserver = "ws://localhost:3001";
-    this.socket = new WebSocket(socketserver);
+    this.socket = new WebSocket("ws://localhost:3001");
 
     this.socket.onopen = (evt) => {
       console.log("Connected to the server");
     };
 
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage);
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages});
-    }, 2000);
+    this.socket.onmessage = (event) => {
+      let data = JSON.parse(event.data);
+      console.log(data);
+
+      switch(data.type) {
+        case "incomingMessage":
+
+          const displayMessage = {
+            id: data.id,
+            username: data.username,
+            content: data.content
+          };
+
+          const newMsgs = this.state.messages.concat(displayMessage);
+          this.setState({
+            messages: newMsgs
+          });
+
+          break;
+
+        case "incomingNotification":
+
+          const displayNotification = {
+            id: data.id,
+            notification: data.content
+          };
+
+          const notifConcat = this.state.messages.concat(displayNotification);
+          this.setState({
+            messages: notifConcat
+          });
+
+          break;
+
+        default:
+          // show an error in the console if the message type is unknown
+          throw new Error("Unknown event type " + msgData.type);
+      }
+
+    };
 
   }
 
@@ -49,6 +79,7 @@ class App extends Component {
   createMessage = (content) => {
 
     const newMessage = {
+      type: 'postMessage',
       username: this.state.currentUser.name,
       content
     }
@@ -57,35 +88,28 @@ class App extends Component {
     let stringifyMsg = JSON.stringify(newMessage)
     this.socket.send(stringifyMsg)
 
-
-    this.socket.onmessage = (e) => {
-      let msgData = JSON.parse(e.data)
-
-      const displayMessage = {
-        id: msgData.id,
-        username: msgData.username,
-        content: msgData.content
-      }
-
-      const newMsgs = this.state.messages.concat(displayMessage)
-
-      this.setState({
-        messages: newMsgs
-      })
-
-    }
-
   }
 
   changeUser = (name) => {
     if (name !== '') {
-      this.setState({
-        currentUser: { name }
-      })
+
+      const newName = {
+        type: 'postNotification',
+        content: `${this.state.currentUser.name} has changed name to ${ name }`
+      }
+
+      let stringifyName = JSON.stringify(newName)
+      this.socket.send(stringifyName)
+
     } else {
-      this.setState({
-        currentUser: { name: 'Anonymous' }
-      })
+
+      const anonName = {
+        type: 'postNotification',
+        content: `${this.state.currentUser.name} has changed name to Anonymous`
+      }
+
+      let stringifyAnon = JSON.stringify(anonName)
+      this.socket.send(stringifyAnon)
     }
   }
 
