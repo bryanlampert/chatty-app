@@ -114,16 +114,14 @@ class App extends Component {
 
     if (content !== '') {
 
-      if (content.match(/(http[s]?:\/\/.*\.(?:png|jpg|gif))/i)) {
-        const foundImage = content.match(/(http[s]?:\/\/.*\.(?:png|jpg|gif))/i)
-        img = foundImage[0]
-        contentText = content.replace(img, '')
+      if (content.match(/(http[s]?:\/\/.*?\.(?:png|jpg|gif))/g)) {
+        img = content.match(/(http[s]?:\/\/.*?\.(?:png|jpg|gif))/g)
+        contentText = content.replace((/(http[s]?:\/\/.*?\.(?:png|jpg|gif))/g), '')
       }
 
       if (!img) {
         contentText = content;
       }
-
       const newMessage = {
         type: 'postMessage',
         username: this.state.currentUser.name,

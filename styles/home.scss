@@ -114,8 +114,8 @@ body {
     text-shadow: none;
 
     .number {
-      color: $accent-colour;
-      text-shadow: 0px 1px $text-colour;
+      color: $secondary-colour;
+      -webkit-text-stroke: 0.5px $text-colour;
     }
   }
 }
