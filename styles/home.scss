@@ -109,6 +109,17 @@ body {
     text-decoration: none;
   }
 
+  .first-joined {
+    float: center;
+    text-shadow: none;
+    background: -webkit-linear-gradient($text-colour, $secondary-colour);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 40px;
+    font-weight: 700;
+    padding: 5px;
+  }
+
   .navbar-user-count {
     float: right;
     text-shadow: none;
@@ -118,15 +129,6 @@ body {
       -webkit-text-stroke: 0.5px $text-colour;
     }
   }
-}
-
-.first-joined {
-  background: -webkit-linear-gradient($accent-colour, $text-colour);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 30px;
-  font-weight: 700;
-  padding: 0 10px;
 }
 
 

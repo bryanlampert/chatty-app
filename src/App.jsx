@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Nav from './nav.jsx';
-import Welcome from './Welcome.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 import { toArray } from 'react-emoji-render';
@@ -94,18 +93,11 @@ class App extends Component {
 
   render() {
     return (
-      this.state.welcome ?
-        (<div>
-          <Nav userCount={this.state.userCount} />
-          <Welcome />
-          <MessageList messages={this.state.messages} />
-          <ChatBar changeUser={this.changeUser} createMessage={this.createMessage} />
-        </div>) :
-        (<div>
-          <Nav userCount={this.state.userCount} />
-          <MessageList messages={this.state.messages} />
-          <ChatBar changeUser={this.changeUser} createMessage={this.createMessage} />
-        </div>)
+      <div>
+        <Nav userCount={this.state.userCount} welcome={this.state.welcome} />
+        <MessageList messages={this.state.messages} />
+        <ChatBar changeUser={this.changeUser} createMessage={this.createMessage} welcome={this.state.welcome} />
+      </div>
     );
   }
 
