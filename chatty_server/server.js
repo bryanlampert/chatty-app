@@ -53,6 +53,7 @@ wss.on('connection', (ws) => {
         id: uuidv4(),
         username: data.username,
         content: data.content,
+        image: data.image,
         userColour: data.userColour
       };
 

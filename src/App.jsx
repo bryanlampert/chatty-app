@@ -44,6 +44,7 @@ class App extends Component {
             id: data.id,
             username: data.username,
             content: data.content,
+            image: data.image,
             userColour: data.userColour
           };
 
@@ -108,12 +109,27 @@ class App extends Component {
   }
 
   createMessage = (content) => {
+    let img;
+    let contentText;
+
     if (content !== '') {
+
+      if (content.match(/(http[s]?:\/\/.*\.(?:png|jpg|gif))/i)) {
+        const foundImage = content.match(/(http[s]?:\/\/.*\.(?:png|jpg|gif))/i)
+        img = foundImage[0]
+        contentText = content.replace(img, '')
+      }
+
+      if (!img) {
+        contentText = content;
+      }
+
       const newMessage = {
         type: 'postMessage',
         username: this.state.currentUser.name,
         userColour: this.state.currentUser.userColour,
-        content
+        image: img,
+        content: contentText
       }
 
       // Send to the server

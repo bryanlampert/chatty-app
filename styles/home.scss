@@ -55,7 +55,7 @@ body {
   .message-username {
     overflow: hidden;
     margin: 5px;
-    padding: 0 10px;
+    padding: 4px 10px;
   }
 
   .message-content {
@@ -63,7 +63,7 @@ body {
   }
 
   .message-username {
-    flex: 2;
+    flex: 1.5;
     font-weight: 700;
     text-shadow:
         3px 3px 0 #000,
@@ -71,6 +71,12 @@ body {
        1px -1px 0 #000,
        -1px 1px 0 #000,
         1px 1px 0 #000;
+  }
+
+  img {
+    display: block;
+    width: 60%;
+    padding: 0.5em 0;
   }
 }
 
