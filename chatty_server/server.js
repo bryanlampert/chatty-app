@@ -19,18 +19,18 @@ const wss = new SocketServer({ server });
 // Create a unique uuid
 const uuidv4 = require('uuid/v4');
 
-// Colour array
-let colours = [ 'red', 'green', 'blue', 'magenta' ];
-
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
+  let red   = (Math.floor(Math.random() * 255)).toString(16);
+  let green = (Math.floor(Math.random() * 255)).toString(16);
+  let blue  = (Math.floor(Math.random() * 255)).toString(16);
   let setColour = {
     type: 'incomingColour',
-    userColour: colours[Math.floor(Math.random() * colours.length)]
+    userColour: red.concat(green, blue)
   };
   ws.send(JSON.stringify(setColour));
 

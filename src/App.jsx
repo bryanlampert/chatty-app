@@ -11,7 +11,7 @@ class App extends Component {
     this.state = {
       currentUser: {
         name: 'Anonymous',
-        userColour: 'White'
+        userColour: 'ffffff'
       },
       messages: [{ userColour: null }],
       userCount: 0,
@@ -20,7 +20,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
 
     // Open server connection
     this.socket = new WebSocket("ws://localhost:3001");
@@ -37,7 +36,6 @@ class App extends Component {
 
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
-      console.log(data, 'data from onmessage');
 
       switch(data.type) {
         case "incomingMessage":
@@ -79,7 +77,6 @@ class App extends Component {
          this.setState({
            currentUser: newColour
          });
-
          break;
 
       }
@@ -94,8 +91,6 @@ class App extends Component {
   }
 
   render() {
-    console.log('Rendering <App />');
-
     return (
       this.state.welcome ?
         (<div>
@@ -142,7 +137,10 @@ class App extends Component {
         this.socket.send(stringifyName)
 
         this.setState({
-          currentUser: { name }
+          currentUser: {
+            name,
+            userColour: this.state.currentUser.userColour
+          }
         })
 
       } else if (this.state.currentUser.name !== 'Anonymous') {
@@ -156,7 +154,10 @@ class App extends Component {
         this.socket.send(stringifyAnon)
 
         this.setState({
-          currentUser: { name: 'Anonymous' }
+          currentUser: {
+            name: 'Anonymous',
+            userColour: this.state.currentUser.userColour
+          }
         })
 
       }

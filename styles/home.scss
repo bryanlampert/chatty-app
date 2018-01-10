@@ -49,6 +49,7 @@ body {
   display: flex;
   padding: 5px;
   color: $text-colour;
+  font-size: 20px;
 
   .message-content,
   .message-username {
@@ -64,7 +65,12 @@ body {
   .message-username {
     flex: 2;
     font-weight: 700;
-    text-shadow: 1px 1px $primary-colour;
+    text-shadow:
+        3px 3px 0 #000,
+      -1px -1px 0 #000,
+       1px -1px 0 #000,
+       -1px 1px 0 #000,
+        1px 1px 0 #000;
   }
 }
 

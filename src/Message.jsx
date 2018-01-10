@@ -5,9 +5,8 @@ let colour = '';
 class Message extends Component {
 
   render() {
-    console.log('Rendering <Message />');
     const colour = {
-      color: this.props.messages.userColour
+      color: '#' + this.props.messages.userColour
     };
 
     return (
@@ -24,7 +23,6 @@ class Message extends Component {
 
 class Notification extends Component {
   render() {
-    console.log('Rendering <Notification />');
     return (
       <div>
         <div className="message system">{this.props.messages.notification}</div>
