@@ -9,15 +9,16 @@ class Message extends Component {
       color: '#' + this.props.messages.userColour
     };
 
-    const img = {
-      image: this.props.messages.image
-    };
+    const img = this.props.messages.image;
 
     return (
       <div>
         <div className="message">
           <span className="message-username" style={ colour }>{this.props.messages.username}</span>
-          <span className="message-content">{this.props.messages.content} <img src={img.image} /> </span>
+          <span className="message-content">
+            {this.props.messages.content}
+            { this.props.messages.image && img.map((images, key) => <img key={key} src={images} />) }
+          </span>
         </div>
       </div>
 
