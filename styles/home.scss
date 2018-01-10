@@ -23,16 +23,18 @@ body {
   padding: 5px;
   position: fixed;
   right: 0;
+  height: 60px;
 
   .chatbar-message,
   .chatbar-username {
     border: 1px solid $accent-colour;
     display: block;
-    height: 40px;
+    height: 50px;
     line-height: 40px;
     margin: 5px;
     padding: 0 9px;
     border-radius: 5px;
+    font-size: 20px;
   }
 
   .chatbar-message {
@@ -88,7 +90,7 @@ body {
 .navbar {
   background: $primary-colour;
   border-bottom: 1px solid $accent-colour;
-  height: 60px;
+  height: 80px;
   left: 0;
   padding: 0 10px;
   position: fixed;
@@ -102,10 +104,10 @@ body {
     display: block;
     float: left;
     font-weight: 700;
-    font-size: 28px;
+    font-size: 40px;
     height: 60px;
-    line-height: 60px;
-    padding: 0 10px;
+    line-height: 80px;
+    padding: 0 20px;
     text-decoration: none;
   }
 
@@ -115,18 +117,24 @@ body {
     background: -webkit-linear-gradient($text-colour, $secondary-colour);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 40px;
+    font-size: 60px;
     font-weight: 700;
     padding: 5px;
   }
 
   .navbar-user-count {
     float: right;
+    display: block;
     text-shadow: none;
+    font-size: 30px;
+    line-height: 80px;
+    margin: 0 5px;
 
     .number {
       color: $secondary-colour;
-      -webkit-text-stroke: 0.5px $text-colour;
+      -webkit-text-stroke: 1px $text-colour;
+      margin-top: 15px;
+      line-height: 90px;
     }
   }
 }
