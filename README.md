@@ -1,45 +1,62 @@
-React Boilerplate
-=====================
+# Chatty App
 
-A minimal and light dev environment for ReactJS.
+##### LHL React Single Page Chat Application
 
-### Usage
+Chatty is a SPA that allows you to chat with other other users connected.
 
-Clone the boilerplate and create your own git repo.
+User handle's are optional and default to anonymous if not set. 
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+Extra features include:
 
-Install the dependencies and start the server.
+- Every user is given a random chat colour for every session.
+- Send an image (or many images) just by pasting the hyperlink
+- Emoji's are rendered by entering certain text
+	- Such as `:)`, `:thumbsup:`, `:'D`, `:see_no_evil:` etc..
+- A connecting screen when first connecting
+ 
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+## Getting Started
 
-### Static Files
+1. Clone the repository.
+2. Install the server dependencies
+	- In your terminal, navigate to the `chatty_server` folder
+	- Type the `npm install` command.
+3. Install the application dependencies
+	- In a separate terminal window/tabe, navigate to the project folder
+	- Type the `npm install` command.
+4. Start both the application and the server
+	- Type `npm start` in both terminals
+5. The app will be served at <http://localhost:3000/>.
+6. Go to <http://localhost:3000/> in your browser to start chatting away!
 
-You can store static files like images, fonts, etc in the `build` folder.
+## Dependencies
 
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
+- react
+- react-dom
+- react-emoji-render
 
-### Linting
+#####Dev dependencies:
 
-This boilerplate project includes React ESLint configuration.
+- babel-core
+- babel-loader
+- babel-preset-es2015
+- babel-preset-react
+- css-loader
+- node-sass
+- sass-loader
+- sockjs-client
+- style-loader
+- webpack
+- webpack-dev-server
 
-```
-npm run lint
-```
+## Screenshots
+Connecting Page:
+!["Screenshot of Connecting Page"]()
 
-### Dependencies
+Initial Chat Page:
+!["Screenshot of Initial Chat Page"]()
 
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+Examples of Messages:
+!["Screenshot of Messages"]()
+!["Screenshot of Messages2"]()
+
