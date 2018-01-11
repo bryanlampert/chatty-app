@@ -51,12 +51,11 @@ Extra features include:
 
 ## Screenshots
 Connecting Page:
-!["Screenshot of Connecting Page"]()
+!["Screenshot of Connecting Page"](https://github.com/bryanlampert/chatty-app/blob/master/docs/Connecting-Welcome-Page.png)
 
 Initial Chat Page:
-!["Screenshot of Initial Chat Page"]()
+!["Screenshot of Initial Chat Page"](https://github.com/bryanlampert/chatty-app/blob/master/docs/Initial%20Chat%20Screen.png)
 
 Examples of Messages:
-!["Screenshot of Messages"]()
-!["Screenshot of Messages2"]()
+!["Screenshot of Messages"](https://github.com/bryanlampert/chatty-app/blob/master/docs/Chat%20Screenshot.png)
 
