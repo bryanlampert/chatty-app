@@ -35,7 +35,7 @@ Extra features include:
 - react-dom
 - react-emoji-render
 
-#####Dev dependencies:
+##### Dev dependencies:
 
 - babel-core
 - babel-loader
