@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const WebSocket = require('ws');
 const SocketServer = WebSocket.Server;
@@ -19,12 +17,9 @@ const wss = new SocketServer({ server });
 // Create a unique uuid
 const uuidv4 = require('uuid/v4');
 
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
 wss.on('connection', (ws) => {
-  console.log('Client connected');
 
+  // Sets a random hex colour code for each user
   let red   = (Math.floor(Math.random() * 255)).toString(16);
   let green = (Math.floor(Math.random() * 255)).toString(16);
   let blue  = (Math.floor(Math.random() * 255)).toString(16);
@@ -34,6 +29,7 @@ wss.on('connection', (ws) => {
   };
   ws.send(JSON.stringify(setColour));
 
+  // Sends the user count
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({
@@ -46,8 +42,7 @@ wss.on('connection', (ws) => {
     let data = JSON.parse(message);
 
     if (data.type === 'postMessage') {
-      console.log('User', data.username, 'said', data.content);
-
+      // Receives a new message and broadcasts to each client
       newMsg = {
         type: 'incomingMessage',
         id: uuidv4(),
@@ -64,7 +59,7 @@ wss.on('connection', (ws) => {
       });
 
     } else if (data.type === 'postNotification') {
-      console.log(data.content);
+      // Receives a user name change and sends notification to each client
       newUser = {
         type: 'incomingNotification',
         content: data.content,
@@ -76,12 +71,11 @@ wss.on('connection', (ws) => {
           client.send(JSON.stringify(newUser));
         }
       });
-
     }
-
   });
 
-  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+  // Client closes the connection
+  // Updates the user counter
   ws.on('close', () => {
     console.log('Client disconnected');
     wss.clients.forEach((client) => {
@@ -91,6 +85,7 @@ wss.on('connection', (ws) => {
     });
   });
 
+  // Error Check
   ws.on('error', e => {
     console.log('oh no! error: ', e);
   });

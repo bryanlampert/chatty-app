@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 class ChatBar extends Component {
   render() {
     const welcome = this.props.welcome;
-
     return (
       (welcome) ?
+        // Disables the chat bar inputs during the simulated connecting welcome
         (<footer className="chatbar">
             <input type="text" className="chatbar-username" disabled
               placeholder={'Your Handle (Optional)'}
@@ -37,6 +37,6 @@ class ChatBar extends Component {
   changeUser = (f) => {
     this.props.changeUser(f.target.value)
   }
-
 }
+
 export default ChatBar;
