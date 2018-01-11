@@ -77,7 +77,6 @@ wss.on('connection', (ws) => {
   // Client closes the connection
   // Updates the user counter
   ws.on('close', () => {
-    console.log('Client disconnected');
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({ userCount: wss.clients.size }));
